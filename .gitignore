@@ -1,0 +1,10 @@
+# Datos generados por la herramienta (nunca deben subirse)
+*.log
+Logs/
+Reports/
+Backups/
+*.bak
+# Sistema
+Thumbs.db
+desktop.ini
+.vscode/
