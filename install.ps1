@@ -9,7 +9,7 @@
     No instala nada en el sistema.
 
     Opcional (variables de entorno, se leen antes de descargar):
-        $env:CSW_VERSION = 'v1.0.0'          # descarga esa etiqueta/release en lugar de la rama main
+        $env:CSW_VERSION = 'v1.0.0'          # descarga el paquete de ese release en lugar de la rama main
         $env:CSW_SHA256  = '<hash del zip>'  # verifica el SHA256 del zip antes de ejecutar nada
     Ejemplo verificado:
         $env:CSW_VERSION='v1.0.0'; $env:CSW_SHA256='ABC123...'; irm https://raw.githubusercontent.com/CyberSutro/cybersutro-win/main/install.ps1 | iex
@@ -23,7 +23,8 @@
     $tag = [string]$env:CSW_VERSION
     if ($tag) {
         if ($tag -notmatch '^[A-Za-z0-9][A-Za-z0-9\.\-_]{0,63}$') { Write-Host "  CSW_VERSION no valida: '$tag'" -ForegroundColor Red; return }
-        $zipUrl = "https://github.com/$repo/archive/refs/tags/$tag.zip"
+        # Paquete fijo publicado como recurso del release (bytes estables -> SHA256 verificable)
+        $zipUrl = "https://github.com/$repo/releases/download/$tag/cybersutro-win-$tag.zip"
     }
     $expected = ([string]$env:CSW_SHA256).Trim().ToUpperInvariant()
     if ($expected -and $expected -notmatch '^[0-9A-F]{64}$') { Write-Host '  CSW_SHA256 no es un SHA256 valido (64 caracteres hexadecimales).' -ForegroundColor Red; return }

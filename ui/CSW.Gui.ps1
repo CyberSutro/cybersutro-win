@@ -1268,6 +1268,7 @@ function Set-CSWGuiLogVisible {
     Update-CSWGuiLogToggle
     if ($Visible -and $g.LogItems.Count -gt 0 -and $g.C.AutoScrollChk.IsChecked) {
         $g.C.LogList.ScrollIntoView($g.LogItems[$g.LogItems.Count - 1])
+        Reset-CSWGuiLogHScroll
     }
 }
 
@@ -1285,8 +1286,26 @@ function Update-CSWGuiLogView {
     if ($n -eq 1) { $g.C.LogCount.Text = '1 línea' } else { $g.C.LogCount.Text = ('{0} líneas' -f $n) }
     if ($g.LogVisible -and $n -gt 0 -and $g.C.AutoScrollChk.IsChecked) {
         $g.C.LogList.ScrollIntoView($g.LogItems[$n - 1])
+        Reset-CSWGuiLogHScroll
     }
     Update-CSWGuiLogToggle
+}
+
+function Reset-CSWGuiLogHScroll {
+    # ScrollIntoView desplaza en horizontal con lineas largas y oculta la hora: volver al borde izquierdo
+    $g = $script:CSWGui
+    try {
+        if (-not $g.ContainsKey('LogScroll') -or -not $g.LogScroll) {
+            $d = $g.C.LogList
+            while ($d -and -not ($d -is [System.Windows.Controls.ScrollViewer])) {
+                if ([System.Windows.Media.VisualTreeHelper]::GetChildrenCount($d) -lt 1) { $d = $null; break }
+                $d = [System.Windows.Media.VisualTreeHelper]::GetChild($d, 0)
+            }
+            $g.LogScroll = $d
+        }
+        if ($g.LogScroll) { $g.LogScroll.ScrollToHorizontalOffset(0) }
+    }
+    catch { }
 }
 
 function Receive-CSWGuiLogQueue {

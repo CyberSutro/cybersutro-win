@@ -5,6 +5,8 @@ Interfaz gráfica moderna (WPF) **y** menú de consola, pensada para técnicos q
 atienden PCs de clientes: diagnostica, repara, limpia y entrega un **informe HTML
 del servicio** listo para el cliente.
 
+![Panel de inicio de Cybersutro win](docs/img/dashboard.png)
+
 ## Ejecutar en una línea
 
 Abre PowerShell y pega:
@@ -17,18 +19,26 @@ Descarga la última versión (solo HTTPS) a una carpeta nueva con nombre aleator
 `%LOCALAPPDATA%\CybersutroWin` (privada del usuario) y la abre como administrador.
 No instala nada en el sistema.
 
-**Descarga verificada (recomendado cuando se publique un release):**
+**Descarga verificada (recomendada en equipos de clientes):** fija una versión publicada y
+su SHA256. Copia el comando exacto desde las notas del
+[último release](https://github.com/CyberSutro/cybersutro-win/releases/latest):
 
 ```powershell
-$env:CSW_VERSION = 'v1.0.0'                  # etiqueta del release
-$env:CSW_SHA256  = '<SHA256 del zip publicado>'
+$env:CSW_VERSION = 'v1.0.0'
+$env:CSW_SHA256  = '<SHA256 publicado en el release>'
 irm https://raw.githubusercontent.com/CyberSutro/cybersutro-win/main/install.ps1 | iex
 ```
 
-Con `CSW_SHA256` definido, el instalador calcula el SHA256 del zip y **no ejecuta nada** si
-no coincide. El hash se obtiene al publicar el release con
-`Get-FileHash .\cybersutro-win-v1.0.0.zip -Algorithm SHA256` (el zip que genera GitHub en
-`archive/refs/tags/<tag>.zip`) y se publica junto a las notas del release.
+Con `CSW_VERSION` se descarga el paquete `cybersutro-win-<version>.zip` adjunto al release;
+con `CSW_SHA256` el instalador calcula su hash y **no ejecuta nada** si no coincide.
+
+## Capturas
+
+| Módulo con acciones | Ejecución con registro en vivo |
+|---|---|
+| ![Módulo de reparación](docs/img/reparacion.png) | ![Ejecución de una acción](docs/img/ejecucion.png) |
+| **Auditoría de ciberseguridad** | **Informe HTML para el cliente** |
+| ![Auditoría de ciberseguridad](docs/img/auditoria.png) | ![Informe de servicio](docs/img/informe.png) |
 
 ### Desde USB
 
@@ -44,7 +54,7 @@ Copia la carpeta y haz doble clic en `Iniciar.bat` (o `Iniciar.bat consola`).
 
 | Módulo | Ejemplos |
 |---|---|
-| **Diagnóstico** | Resumen e inventario de hardware, software instalado, drivers con error, eventos críticos, historial de BSOD, batería, rendimiento, activación |
+| **Diagnóstico** | Resumen e inventario de hardware, software instalado, drivers con error, eventos críticos, historial de BSOD, rendimiento, programas de inicio, activación |
 | **Salud de hardware** | Revisión profunda con puntuación 0-100: discos (SMART), RAM, batería, CPU/térmico, gráficos y periféricos |
 | **Red** | Ping, test de conectividad completo, traceroute, flush DNS, reset Winsock/TCP-IP, test de puertos, escaneo de la red local, WiFi, proxy, test de velocidad |
 | **Reparación** | SFC, DISM (Check/Scan/RestoreHealth), CHKDSK, reparar Windows Update, puntos de restauración, info de arranque, hora, reinicio pendiente |
@@ -78,6 +88,7 @@ ui/CSW.Gui.ps1          Interfaz WPF (runspace en segundo plano, log en vivo)
 ui/CSW.Console.ps1      Menú de consola
 modules/*.psm1          Un archivo por módulo
 docs/CONTRATO.md        Cómo escribir un módulo nuevo
+docs/AUDITORIA.md       Auditoría de seguridad y calidad del propio código
 ```
 
 ## Añadir funciones
@@ -89,6 +100,12 @@ La GUI y la consola lo muestran solas. Detalles en [docs/CONTRATO.md](docs/CONTR
 
 Windows 10/11 · Windows PowerShell 5.1 (incluido) o PowerShell 7 · permisos de administrador.
 
+## Aviso
+
+Herramienta para técnicos. Las acciones de riesgo medio/alto piden confirmación y se crea un
+punto de restauración antes de modificar el sistema, pero úsala bajo tu responsabilidad y con
+autorización del dueño del equipo.
+
 ## Licencia
 
-MIT
+[MIT](LICENSE)
