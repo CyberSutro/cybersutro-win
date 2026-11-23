@@ -5,7 +5,7 @@ Interfaz gráfica moderna (WPF) **y** menú de consola, pensada para técnicos q
 atienden PCs de clientes: diagnostica, repara, limpia y entrega un **informe HTML
 del servicio** listo para el cliente.
 
-![Panel de inicio de Cybersutro win](docs/img/dashboard.png)
+![Cybersutro win](docs/img/cybersutro-win.png)
 
 ## Ejecutar en una línea
 
